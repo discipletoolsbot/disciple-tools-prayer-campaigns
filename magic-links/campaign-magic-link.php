@@ -206,6 +206,8 @@ class DT_Prayer_Campaign_Magic_Link extends DT_Magic_Url_Base {
         ];
         Disciple_Tools_Reports::insert( $args, true, false );
 
+        do_action( 'dt_campaigns_group_count_recorded', $campaign_id, (int) $params['number'] );
+
         return $params['number'];
     }
 }
