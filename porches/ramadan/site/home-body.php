@@ -58,6 +58,19 @@ $video_url = DT_Porch_Settings::get_field_translation( 'promo_video_url', $lang,
             <hr class="lines wow zoomIn" data-wow-delay="0.3s">
             <p class="section-subtitle wow fadeIn" data-wow-duration="1000ms" data-wow-delay="0.3s"><?php display_translated_field( 'vision' ); ?></p>
         </div>
+        <?php if ( !empty( $video_url ) ): ?>
+            <div class="video-container" style="margin-bottom: 50px;">
+                <div class="video-wrapper" style="max-width:900px; margin: auto; box-shadow: 0 5px 10px 2px #bababa;">
+                    <div style="padding:56.25% 0 0 0;position:relative;">
+                        <iframe
+                            src="<?php echo esc_url( Campaign_Utils::get_video_embed_url( $video_url ) ); ?>"
+                            frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                            style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                            title="Ramadan Video"></iframe>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <div class="row">
             <div class="col-md-4 col-sm-6">
                 <div class="item-boxes wow fadeInDown" data-wow-delay="0.2s">

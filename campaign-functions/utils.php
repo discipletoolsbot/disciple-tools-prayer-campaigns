@@ -13,6 +13,35 @@ class Campaign_Utils {
     public static function get_campaign_goal( $campaign ) {
         return isset( $campaign['campaign_goal']['key'] ) ? $campaign['campaign_goal']['key'] : '247coverage';
     }
+    /**
+     * Convert a Vimeo or YouTube share URL into its embeddable player URL.
+     * Other URLs are returned unchanged.
+     */
+    public static function get_video_embed_url( $video_url ) {
+        if ( empty( $video_url ) ){
+            return $video_url;
+        }
+        if ( strpos( $video_url, 'https://vimeo.com/' ) === 0 ){
+            return str_replace( 'https://vimeo.com/', 'https://player.vimeo.com/video/', $video_url );
+        }
+        $host = preg_replace( '/^www\./', '', wp_parse_url( $video_url, PHP_URL_HOST ) ?? '' );
+        $path = wp_parse_url( $video_url, PHP_URL_PATH ) ?? '';
+        if ( $host === 'youtu.be' ){
+            $video_id = trim( $path, '/' );
+            return !empty( $video_id ) ? 'https://www.youtube.com/embed/' . $video_id : $video_url;
+        }
+        if ( $host === 'youtube.com' || $host === 'm.youtube.com' ){
+            parse_str( wp_parse_url( $video_url, PHP_URL_QUERY ) ?? '', $query );
+            if ( !empty( $query['v'] ) ){
+                return 'https://www.youtube.com/embed/' . $query['v'];
+            }
+            if ( strpos( $path, '/shorts/' ) === 0 ){
+                $video_id = trim( str_replace( '/shorts/', '', $path ), '/' );
+                return !empty( $video_id ) ? 'https://www.youtube.com/embed/' . $video_id : $video_url;
+            }
+        }
+        return $video_url;
+    }
     public static function prayer_commitments_needed( $campaign ) {
         $days_in_campaign = DT_Campaign_Fuel::total_days_in_campaign( $campaign['ID'] );
         if ( $days_in_campaign === -1 ){
